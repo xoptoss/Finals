@@ -1,17 +1,21 @@
 package yammy.main;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
-public class Main implements GuessANumberGame {
+public class Main implements GuessANumberGame , BlackJack {
 	boolean replay = false;
 	Scanner tKeyboard = new Scanner(System.in);
 	String input;
-	int Guess;
+	int Guess,PHand,DHand;
 	int Win,Lose,Tie;
+	boolean done = false;
+
 
 	public static void main(String[] args) {
 		Main main = new Main();		
 		boolean replay = false;
+
 		while(!main.replay){
 			main.Game();
 			main.PlayAgian();
@@ -44,8 +48,12 @@ public class Main implements GuessANumberGame {
 		}
 		case"blackjack":
 		{
-
+			BlackJack();
+			break;
 		}
+		default:
+			System.out.println("Not a Choice");
+			Game();
 		}
 	}
 	public void GuessANumberOne() {
@@ -86,16 +94,13 @@ public class Main implements GuessANumberGame {
 		{
 
 		case"yes":
-		{
-			replay=true;
-
-			break;
+		{			
+			return;
 		}
 		case"no":
 		{
 			replay=false;
-
-			break;
+			return;
 		}
 		default:
 		{
@@ -105,5 +110,77 @@ public class Main implements GuessANumberGame {
 
 		}
 
+	}
+	public void BlackJack(){
+		done = false;
+		CardStart();
+		while(!done)
+		{
+			ShowHand();
+
+			System.out.println("Would you like to Hit or stay?");
+			input = tKeyboard.next();
+			switch(input.toLowerCase()) 
+			{
+			case"hit":
+			{
+				Hit();			
+			}
+			}
+
+			DealerPlay();
+			Score();
+
+		}
+	}
+	public void Hit(){
+		PHand += card.Throw();
+	}
+	public void Score(){
+		if(PHand == 21 && DHand != 21)
+		{
+			ShowHand();
+			System.out.println("You Win!");
+			Win++;
+			done = true;
+		}
+		else if(PHand <21 && DHand > 21){
+			ShowHand();
+			System.out.println("You Win!");
+			Win++;
+			done = true;
+		}
+		else if( (PHand >21 && DHand > 21)||(PHand == 21 && DHand == 21))
+		{
+			ShowHand();
+			System.out.println("We Tied!");
+			Tie++;
+			done = true;
+		}
+		else if(PHand > 21 && DHand <= 21 )
+		{
+			ShowHand();
+			System.out.println("You lose!");
+			Lose++;
+			done = true;
+		}
+
+	}
+	public void CardStart(){
+		PHand = card.Throw(); 
+		PHand += card.Throw();
+		DHand = card.Throw();
+		DHand += card.Throw();
+	}
+	public void ShowHand(){
+		System.out.println("Your hand adds up to "+PHand);
+		System.out.println("My hand adds up to "+DHand);
+	}
+	public void DealerPlay(){
+		if(DHand<21 && PHand > DHand)
+			DHand += card.Throw();
+
+		else if(DHand<21 && PHand<17)
+			DHand += card.Throw();
 	}
 }
