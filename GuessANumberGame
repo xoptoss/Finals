@@ -1,0 +1,7 @@
+package yammy.main;
+
+public interface GuessANumberGame {
+
+	static Dice dice = new Dice();
+	static DoubleDice dDice = new DoubleDice();
+}
